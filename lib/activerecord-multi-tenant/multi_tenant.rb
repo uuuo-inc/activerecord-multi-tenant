@@ -132,20 +132,20 @@ module MultiTenant
   # Instruments the methods provided with previously set Multitenant parameters
   # TODO: Could not understand the use of owner here. Need to check
   def self.wrap_methods(klass, owner, *method_names)
-  #   mod = Module.new
-  #   klass.prepend(mod)
+    mod = Module.new
+    klass.prepend(mod)
 
-  #   method_names.each do |method_name|
-  #     mod.module_eval <<-CODE, __FILE__, __LINE__ + 1
-  #       def #{method_name}(...)
-  #         if MultiTenant.multi_tenant_model_for_table(#{owner}.class.table_name).present? && #{owner}.persisted? && MultiTenant.current_tenant_id.nil? && #{owner}.class.respond_to?(:partition_key) && #{owner}.attributes.include?(#{owner}.class.partition_key)
-  #           MultiTenant.with(#{owner}.public_send(#{owner}.class.partition_key)) { super }
-  #         else
-  #           super
-  #         end
-  #       end
-  #     CODE
-  #   end
+    method_names.each do |method_name|
+      mod.module_eval <<-CODE, __FILE__, __LINE__ + 1
+        def #{method_name}(...)
+          if MultiTenant.multi_tenant_model_for_table(#{owner}.class.table_name).present? && #{owner}.persisted? && MultiTenant.current_tenant_id.nil? && #{owner}.class.respond_to?(:partition_key) && #{owner}.attributes.include?(#{owner}.class.partition_key)
+            MultiTenant.with(#{owner}.public_send(#{owner}.class.partition_key)) { super }
+          else
+            super
+          end
+        end
+      CODE
+    end
   end
 
   # Preserve backward compatibility for people using .with_id
