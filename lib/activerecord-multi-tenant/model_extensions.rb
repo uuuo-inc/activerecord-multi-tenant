@@ -171,7 +171,7 @@ ActiveSupport.on_load(:active_record) do |base|
 
   # Any queuries fired for fetching a singular association have the correct current_tenant_id in WHERE clause
   # reload is called anytime any record's association is accessed
-  MultiTenant.wrap_methods(ActiveRecord::Associations::Association, 'owner', :reload)
+  # MultiTenant.wrap_methods(ActiveRecord::Associations::Association, 'owner', :reload)
 
   # For collection associations, we need to wrap multiple methods in returned proxy so that
   # any queries have the correct current_tenant_id in WHERE clause
