@@ -39,7 +39,6 @@ module MultiTenant
 
     def function(obj)
       visit obj.expressions
-      visit obj.alias
       visit obj.distinct
     end
     alias visit_Arel_Nodes_Avg    function
@@ -54,12 +53,10 @@ module MultiTenant
       visit obj.name
       visit obj.expressions
       visit obj.distinct
-      visit obj.alias
     end
 
     def visit_Arel_Nodes_Count(obj)
       visit obj.expressions
-      visit obj.alias
       visit obj.distinct
     end
 
