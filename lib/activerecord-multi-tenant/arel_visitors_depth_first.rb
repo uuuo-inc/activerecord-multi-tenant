@@ -7,6 +7,8 @@ module MultiTenant
       super()
     end
 
+    DISPATCH = dispatch_cache
+
     private
 
     def visit(obj, _ = nil)
@@ -17,6 +19,7 @@ module MultiTenant
     def unary(obj)
       visit obj.expr
     end
+    # rubocop:disable Naming/MethodName
     alias visit_Arel_Nodes_Else              unary
     alias visit_Arel_Nodes_Group             unary
     alias visit_Arel_Nodes_Cube              unary
@@ -39,7 +42,6 @@ module MultiTenant
 
     def function(obj)
       visit obj.expressions
-      visit obj.alias
       visit obj.distinct
     end
     alias visit_Arel_Nodes_Avg    function
@@ -48,18 +50,14 @@ module MultiTenant
     alias visit_Arel_Nodes_Min    function
     alias visit_Arel_Nodes_Sum    function
 
-    # rubocop:disable Naming/MethodName
-
     def visit_Arel_Nodes_NamedFunction(obj)
       visit obj.name
       visit obj.expressions
       visit obj.distinct
-      visit obj.alias
     end
 
     def visit_Arel_Nodes_Count(obj)
       visit obj.expressions
-      visit obj.alias
       visit obj.distinct
     end
 
@@ -196,8 +194,6 @@ module MultiTenant
         visit(v)
       end
     end
-
-    DISPATCH = dispatch_cache
 
     # rubocop:disable Naming/AccessorMethodName
     def get_dispatch_cache
